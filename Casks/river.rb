@@ -1,0 +1,41 @@
+# Source-of-truth template for the Homebrew cask. The live copy lives in the
+# separate tap repo (abgregs/homebrew-river) at Casks/river.rb and is a
+# GENERATED artifact: on each release tag, release.yml substitutes `version`
+# and `sha256` (from the published River-x.y.z.dmg.sha256) into this
+# template and pushes the result to the tap (planning 0013). Edit the cask's
+# shape here — never by hand in the tap. See packaging/homebrew/README.md.
+cask "river" do
+  version "0.1.0"
+  sha256 "f5e55083a6dd003225c8bafd49100abe61379d68be5360f4ec5de7b08569bc28" # from the published .dmg.sha256
+
+  url "https://github.com/abgregs/river/releases/download/v#{version}/River-#{version}.dmg"
+  name "River"
+  desc "Menu bar dictation app with on-device transcription"
+  homepage "https://github.com/abgregs/river"
+
+  depends_on macos: :sonoma # macOS 14+
+  depends_on arch: :arm64   # Apple Silicon only
+
+  # The app self-updates via Sparkle (planning 0009); tell Homebrew so
+  # `brew upgrade` defers to Sparkle instead of fighting it. Users still get new
+  # versions on `brew upgrade --greedy` or a cask bump.
+  auto_updates true
+
+  app "River.app"
+
+  caveats <<~EOS
+    River needs Microphone, Input Monitoring, and Accessibility permissions.
+    On first launch, onboarding guides you through granting them in
+    System Settings -> Privacy & Security.
+
+    First launch downloads the speech model (~240 MB). Every launch and
+    dictation after that is fully on-device.
+  EOS
+
+  # `zap` also removes the app-specific model cache (~240 MB); a plain
+  # uninstall leaves it in place so a reinstall need not re-download it.
+  zap trash: [
+    "~/Library/Preferences/com.river.app.plist",
+    "~/Library/Application Support/River",
+  ]
+end
