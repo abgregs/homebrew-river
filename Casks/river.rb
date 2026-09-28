@@ -5,8 +5,8 @@
 # template and pushes the result to the tap (planning 0013). Edit the cask's
 # shape here — never by hand in the tap. See packaging/homebrew/README.md.
 cask "river" do
-  version "0.1.0"
-  sha256 "f5e55083a6dd003225c8bafd49100abe61379d68be5360f4ec5de7b08569bc28" # from the published .dmg.sha256
+  version "0.2.0"
+  sha256 "3233ecfe704a72af43632eb97daf67db685bf95cff8795064c6ced7b45d2d827" # from the published .dmg.sha256
 
   url "https://github.com/abgregs/river/releases/download/v#{version}/River-#{version}.dmg"
   name "River"
